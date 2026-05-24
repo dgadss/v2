@@ -71,12 +71,12 @@
 
     <script>
         // ==================== SUPABASE CONFIG ====================
-        const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';   // เปลี่ยนเป็น URL ของคุณ
-        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vfJfw_LrblczbP';                   // เปลี่ยนเป็น Anon Key ของคุณ
+        const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vfJfw_LrblczbP';   // ← เปลี่ยนเป็น Anon Key ของคุณ
 
         const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ==================== FUNCTIONS ====================
+        // ==================== LOGIN ====================
         async function signIn() {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -95,22 +95,21 @@
             }
         }
 
+        // ==================== REGISTER ====================
         async function signUp() {
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value.trim();
             const fullName = document.getElementById('reg-fullname').value.trim();
 
             if (!email || !password || !fullName) {
-                alert("กรุณากรอกข้อมูลให้ครบ");
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                 return;
             }
 
             const { data, error } = await supabase.auth.signUp({ 
                 email, 
                 password,
-                options: {
-                    data: { full_name: fullName }
-                }
+                options: { data: { full_name: fullName } }
             });
             
             if (error) {
