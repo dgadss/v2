@@ -72,10 +72,10 @@
     <script>
         // ==================== SUPABASE CONFIG ====================
         const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ← ใส่ Anon Key ของคุณ
+        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ใส่ Anon Key จริงของคุณ
 
         // สร้าง Client ครั้งเดียว (แก้ปัญหาการประกาศซ้ำ)
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==================== LOGIN ====================
         async function signIn() {
@@ -87,7 +87,7 @@
                 return;
             }
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             
             if (error) {
                 alert("เข้าสู่ระบบไม่สำเร็จ: " + error.message);
@@ -107,7 +107,7 @@
                 return;
             }
 
-            const { data, error } = await supabase.auth.signUp({ 
+            const { data, error } = await supabaseClient.auth.signUp({ 
                 email, 
                 password,
                 options: { data: { full_name: fullName } }
