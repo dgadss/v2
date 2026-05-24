@@ -72,8 +72,9 @@
     <script>
         // ==================== SUPABASE CONFIG ====================
         const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vfJfw_LrblczbP';   // ← เปลี่ยนเป็น Anon Key ของคุณ
+        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vfJfw_LrblczbP';   // ← เปลี่ยนเป็น Anon Key จริงของคุณ
 
+        // สร้าง Supabase Client ครั้งเดียว
         const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==================== LOGIN ====================
