@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - DGA Digital Service Standard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600&display=swap');
+        body { font-family: 'Noto Sans Thai', system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl p-8">
+        <div class="text-center mb-8">
+            <img src="DGALogo.png" alt="DGA" class="h-16 mx-auto mb-4">
+            <h1 class="text-2xl font-semibold text-[#0b3d91]">DGA Digital Service Standard</h1>
+            <p class="text-gray-500 mt-1">ระบบประเมินตนเอง</p>
+        </div>
+
+        <div id="login-form">
+            <h2 class="text-xl font-medium mb-6 text-center">เข้าสู่ระบบ</h2>
+            <input id="email" type="email" placeholder="อีเมล" 
+                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4 focus:outline-none focus:border-[#0b3d91]">
+            <input id="password" type="password" placeholder="รหัสผ่าน" 
+                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6 focus:outline-none focus:border-[#0b3d91]">
+            
+            <button onclick="signIn()" 
+                    class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">
+                เข้าสู่ระบบ
+            </button>
+            
+            <div class="text-center mt-6">
+                <p class="text-sm text-gray-500">ยังไม่มีบัญชี? 
+                    <span onclick="showRegister()" class="text-[#0b3d91] cursor-pointer hover:underline">สมัครสมาชิก</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="hidden">
+            <h2 class="text-xl font-medium mb-6 text-center">สมัครสมาชิก</h2>
+            <input id="reg-fullname" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
+            <input id="reg-email" type="email" placeholder="อีเมล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
+            <input id="reg-password" type="password" placeholder="รหัสผ่าน" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6">
+            
+            <button onclick="signUp()" 
+                    class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">
+                สมัครสมาชิก
+            </button>
+            
+            <div class="text-center mt-6">
+                <p class="text-sm text-gray-500">มีบัญชีแล้ว? 
+                    <span onclick="showLogin()" class="text-[#0b3d91] cursor-pointer hover:underline">เข้าสู่ระบบ</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://yqtejmlnyimpxsjedlww.supabase.co';  // เปลี่ยนเป็น URL ของคุณ
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';                   // เปลี่ยนเป็น Anon Key ของคุณ
+
+        const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function signIn() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                alert("เข้าสู่ระบบไม่สำเร็จ: " + error.message);
+            } else {
+                window.location.href = "index.html";
+            }
+        }
+
+        async function signUp() {
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const fullName = document.getElementById('reg-fullname').value;
+
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) {
+                alert("สมัครสมาชิกไม่สำเร็จ: " + error.message);
+            } else {
+                alert("สมัครสมาชิกสำเร็จ! กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี");
+                showLogin();
+            }
+        }
+
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
