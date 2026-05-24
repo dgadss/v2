@@ -75,7 +75,7 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ใส่ Anon Key จริงของคุณ
 
         // สร้าง Client ครั้งเดียว (แก้ปัญหาการประกาศซ้ำ)
-        const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==================== LOGIN ====================
         async function signIn() {
