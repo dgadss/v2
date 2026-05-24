@@ -22,26 +22,23 @@
         </div>
 
         <!-- Login Form -->
-        <div id="login-form">
+        <div>
             <h2 class="text-xl font-medium mb-6 text-center">เข้าสู่ระบบ</h2>
-            <input id="email" type="email" placeholder="อีเมล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
-            <input id="password" type="password" placeholder="รหัสผ่าน" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6">
-            <button onclick="signIn()" class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">เข้าสู่ระบบ</button>
-            <div class="text-center mt-6 text-sm">
-                <p class="text-gray-500">ยังไม่มีบัญชี? <span onclick="showRegister()" class="text-[#0b3d91] cursor-pointer hover:underline">สมัครสมาชิก</span></p>
-            </div>
-        </div>
-
-        <!-- Register Form -->
-        <div id="register-form" class="hidden">
-            <h2 class="text-xl font-medium mb-6 text-center">สมัครสมาชิก</h2>
-            <input id="reg-fullname" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
-            <input id="reg-email" type="email" placeholder="อีเมล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
-            <input id="reg-password" type="password" placeholder="รหัสผ่าน (อย่างน้อย 9 ตัวอักษร)" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
-            <input id="reg-confirm-password" type="password" placeholder="ยืนยันรหัสผ่าน" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6">
-            <button onclick="signUp()" class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">สมัครสมาชิก</button>
-            <div class="text-center mt-6 text-sm">
-                <p class="text-gray-500">มีบัญชีแล้ว? <span onclick="showLogin()" class="text-[#0b3d91] cursor-pointer hover:underline">เข้าสู่ระบบ</span></p>
+            
+            <input id="email" type="email" placeholder="อีเมล" 
+                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4 focus:outline-none focus:border-[#0b3d91]">
+            
+            <input id="password" type="password" placeholder="รหัสผ่าน" 
+                   class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6 focus:outline-none focus:border-[#0b3d91]">
+            
+            <button onclick="signIn()" 
+                    class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">
+                เข้าสู่ระบบ
+            </button>
+            
+            <div class="text-center mt-8 text-sm text-gray-500">
+                <p>บัญชีผู้ใช้ถูกสร้างโดยผู้ดูแลระบบ</p>
+                <p class="mt-1">ติดต่อ Admin หากยังไม่มีบัญชี</p>
             </div>
         </div>
     </div>
@@ -49,9 +46,8 @@
     <script>
         // ==================== SUPABASE CONFIG ====================
         const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ใช้ Publishable Key
+        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // เปลี่ยนเป็น Publishable Key จริงของคุณ
 
-        // ใช้ supabase (ตัวเล็ก) ตามที่ library CDN ให้มา
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==================== LOGIN ====================
@@ -59,45 +55,18 @@
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
-            if (!email || !password) return alert("กรุณากรอกอีเมลและรหัสผ่าน");
+            if (!email || !password) {
+                alert("กรุณากรอกอีเมลและรหัสผ่าน");
+                return;
+            }
 
             const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) alert("เข้าสู่ระบบไม่สำเร็จ: " + error.message);
-            else window.location.href = "index.html";
-        }
-
-        // ==================== REGISTER ====================
-        async function signUp() {
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value.trim();
-            const confirmPassword = document.getElementById('reg-confirm-password').value.trim();
-            const fullName = document.getElementById('reg-fullname').value.trim();
-
-            if (!email || !password || !fullName) return alert("กรุณากรอกข้อมูลให้ครบ");
-            if (password !== confirmPassword) return alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
-            if (password.length < 9) return alert("รหัสผ่านต้องอย่างน้อย 9 ตัวอักษร");
-
-            const { error } = await supabaseClient.auth.signUp({ 
-                email, 
-                password,
-                options: { data: { full_name: fullName } }
-            });
-
-            if (error) alert("สมัครไม่สำเร็จ: " + error.message);
-            else {
-                alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
-                showLogin();
+            
+            if (error) {
+                alert("เข้าสู่ระบบไม่สำเร็จ: " + error.message);
+            } else {
+                window.location.href = "index.html";
             }
-        }
-
-        function showRegister() {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('register-form').classList.remove('hidden');
-        }
-
-        function showLogin() {
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
         }
     </script>
 </body>
