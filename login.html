@@ -37,7 +37,7 @@
             <h2 class="text-xl font-medium mb-6 text-center">สมัครสมาชิก</h2>
             <input id="reg-fullname" type="text" placeholder="ชื่อ-นามสกุล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
             <input id="reg-email" type="email" placeholder="อีเมล" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
-            <input id="reg-password" type="password" placeholder="รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
+            <input id="reg-password" type="password" placeholder="รหัสผ่าน (อย่างน้อย 9 ตัวอักษร)" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-4">
             <input id="reg-confirm-password" type="password" placeholder="ยืนยันรหัสผ่าน" class="w-full px-5 py-4 border border-gray-300 rounded-2xl mb-6">
             <button onclick="signUp()" class="w-full bg-[#0b3d91] text-white py-4 rounded-2xl font-medium hover:bg-[#0a2e70]">สมัครสมาชิก</button>
             <div class="text-center mt-6 text-sm">
@@ -49,9 +49,9 @@
     <script>
         // ==================== SUPABASE CONFIG ====================
         const SUPABASE_URL = 'https://yqtejmlnyimpxsjedlww.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ← ใช้ Publishable Key
+        const SUPABASE_ANON_KEY = 'sb_publishable_GtsQ_8ZdWuvC5X7j5vFJfw_LrblczbP';   // ใช้ Publishable Key
 
-        // ใช้ชื่อ supabaseClient เพื่อหลีกเลี่ยง conflict กับ library
+        // ใช้ supabase (ตัวเล็ก) ตามที่ library CDN ให้มา
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ==================== LOGIN ====================
@@ -73,18 +73,9 @@
             const confirmPassword = document.getElementById('reg-confirm-password').value.trim();
             const fullName = document.getElementById('reg-fullname').value.trim();
 
-            if (!email || !password || !fullName) {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-                return;
-            }
-            if (password !== confirmPassword) {
-                alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
-                return;
-            }
-            if (password.length < 9) {
-                alert("รหัสผ่านต้องอย่างน้อย 9 ตัวอักษร");
-                return;
-            }
+            if (!email || !password || !fullName) return alert("กรุณากรอกข้อมูลให้ครบ");
+            if (password !== confirmPassword) return alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+            if (password.length < 9) return alert("รหัสผ่านต้องอย่างน้อย 9 ตัวอักษร");
 
             const { error } = await supabaseClient.auth.signUp({ 
                 email, 
@@ -92,23 +83,4 @@
                 options: { data: { full_name: fullName } }
             });
 
-            if (error) {
-                alert("สมัครสมาชิกไม่สำเร็จ: " + error.message);
-            } else {
-                alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
-                showLogin();
-            }
-        }
-
-        function showRegister() {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('register-form').classList.remove('hidden');
-        }
-
-        function showLogin() {
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
-        }
-    </script>
-</body>
-</html>
+            if (error) alert
